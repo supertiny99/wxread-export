@@ -26,6 +26,10 @@ class Book {
         result += `## ${this.markByChapterUid[chapterUid].title}\n`;
       }
       this.markByChapterUid[chapterUid].marks.forEach((markItem) => {
+        const markCreateTime = this.formatMarkCreateTime(markItem.createTime);
+        if (markCreateTime) {
+          result += `* 标注时间：${markCreateTime}\n`;
+        }
         if (markItem.reviewText) {
           result += `${markItem.reviewText}\n`;
         }
@@ -109,6 +113,17 @@ class Book {
         }
       }
     }
+  }
+  /**
+   * 将秒级时间戳格式化为可读字符串
+   * @param {number} timestamp
+   * @returns {string}
+   */
+  formatMarkCreateTime(timestamp) {
+    if (!timestamp) return "";
+    const unixSeconds = Number(timestamp);
+    if (Number.isNaN(unixSeconds)) return "";
+    return new Date(unixSeconds * 1000).toLocaleString();
   }
 }
 /**
